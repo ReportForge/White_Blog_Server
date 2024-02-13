@@ -1,5 +1,5 @@
 // middleware/authMiddleware.js
-
+const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 const isAuthenticated = (req, res, next) => {
