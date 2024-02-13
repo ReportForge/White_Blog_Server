@@ -22,7 +22,18 @@ const userController = {
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
+  },
+
+  async getAllUsers(req, res) {
+    try {
+      const users = await User.find({});
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-};
+
+};//end
+
 
 module.exports = userController;

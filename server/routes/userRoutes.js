@@ -9,6 +9,6 @@ router.get('/:id', isAuthenticated, userController.getUserProfile);
 // Update user profile - Only accessible by the user themselves
 router.put('/:id', isAuthenticated, userController.updateUserProfile);
 
-// You might add more routes for admin operations like listing all users, deleting users, etc.
+router.get(isAuthenticated, userController.getAllUsers);
 
 module.exports = router;
