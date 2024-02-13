@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const ContentBlockSchema = require('./ContentBlock'); // Import the ContentBlock schema
 
-const BlogSchema = new mongoose.Schema({
+const BlogPostSchema = new mongoose.Schema({
   title: { type: String, required: true },
   authors: [{
     name: String,
@@ -17,6 +17,6 @@ const BlogSchema = new mongoose.Schema({
   references: [String], // Array of URLs or references
 });
 
-const Blog = mongoose.model('Blog', BlogSchema);
+const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
 
-module.exports = Blog;
+module.exports = BlogPost;
