@@ -12,7 +12,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(bodyParser.json());
+// Increase the limit for the JSON body parser and Increase the limit for the URL-encoded body parser
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+
+
 app.use(cors());
 
 // Connect to MongoDB
