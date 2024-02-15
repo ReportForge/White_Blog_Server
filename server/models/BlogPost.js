@@ -15,6 +15,8 @@ const BlogPostSchema = new mongoose.Schema({
   tags: [String], // Array of strings
   mainImage: String,
   contentBlocks: [ContentBlockSchema], // Array of content blocks
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Reference to the User model
+  isDraft: { type: Boolean, default: false }, // Indicates if the blog post is a draft
 });
 
 const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
