@@ -1,4 +1,6 @@
 const BlogPost = require('../models/BlogPost');
+const nodemailer = require('nodemailer');
+const User = require('../models/User');
 
 const blogPostController = {
   // Create a new blogPost post
@@ -6,6 +8,46 @@ const blogPostController = {
     try {
       const newBlogPost = new BlogPost(req.body);
       await newBlogPost.save();
+
+      // Set up mail transporter
+      const transporter = nodemailer.createTransport({
+        service: 'gmail', // For Gmail, or use another service
+        auth: {
+          user: process.env.EMAIL, // Your email
+          pass: process.env.EMAIL_PASSWORD, // Your email account password
+        },
+      });
+
+      // Get all users' emails
+      const users = await User.find().select('email -_id'); // Adjust based on your User model
+
+      const mailOptions = {
+        from: process.env.EMAIL,
+        to: users.map(user => user.email),
+        subject: `New Blog Post: ${newBlogPost.title}`,
+        html: `
+          <p>Check out our latest blog post!</p>
+          <h1>${newBlogPost.title}</h1>
+          <img src="cid:unique@blogpost.image" alt="Blog Post Image" style="width:100%;max-width:600px;height:auto;">
+          <p><a href="http://localhost:3001/full-blog-post/${newBlogPost._id}">Read more</a></p>
+        `,
+        attachments: [{
+          filename: 'image.png',
+          path: newBlogPost.mainImage, // If this is a local file path or a URL
+          cid: 'unique@blogpost.image' // same cid value as in the html img src
+        }]
+      };
+      
+
+      // Send email to all users
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log('Error sending email: ', error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+
       res.status(201).json(newBlogPost);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -84,7 +126,7 @@ const blogPostController = {
       res.status(500).json({ message: error.message });
     }
   },
-  
+
 
   async getDraftPost(req, res) {
     try {
