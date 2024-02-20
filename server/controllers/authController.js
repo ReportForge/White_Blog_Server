@@ -74,11 +74,7 @@ const sendVerificationEmail = async (userEmail, verificationCode) => {
 const verifyEmail = async (req, res) => {
   try {
     const { email, verificationCode } = req.body;
-    console.log(req.body);
     const user = await User.findOne({ email });
-    console.log(user.verificationCode);
-    console.log(verificationCode);
-    console.log(user.verificationCode == verificationCode);
 
     if (!user || user.verificationCode !== verificationCode) {
       return res.status(400).json({ message: 'Invalid verification code.' });

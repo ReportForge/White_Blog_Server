@@ -15,7 +15,9 @@ const UserSchema = new mongoose.Schema({
   isEditor: { type: Boolean, default: false }, // Existing field to indicate if the user is an editor
   profilePicture: { type: String, default: '' }, // New field for the profile image path, optional
   verificationCode: { type: String, required: false }, // Field for the email verification code
-  emailVerified: { type: Boolean, default: false } // Field to indicate if the email has been verified
+  emailVerified: { type: Boolean, default: false }, // Field to indicate if the email has been verified
+  resetPasswordToken: { type: String, required: false }, // Field for the password reset token
+  resetPasswordExpire: { type: Date, required: false } // Field for the expiration time of the password reset token
 });
 
 const User = mongoose.model('User', UserSchema);
