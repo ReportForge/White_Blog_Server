@@ -37,7 +37,7 @@ const blogPostController = {
           cid: 'unique@blogpost.image' // same cid value as in the html img src
         }]
       };
-      
+
 
       // Send email to all users
       transporter.sendMail(mailOptions, (error, info) => {
@@ -157,7 +157,39 @@ const blogPostController = {
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  }
+  },
+
+  async handleLikePost(req, res) {
+    const { postId } = req.body; 
+    const userId = req.user.userId;
+
+    try {
+      const post = await BlogPost.findById(postId);
+
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+
+      // Check if the user has already liked the post
+      const userIndex = post.likes.findIndex((id) => id.equals(userId));
+
+      if (userIndex === -1) {
+        // If the user hasn't liked the post yet, add their ID to the likes array and increment the likeCount
+        post.likes.push(userId);
+        post.likeCount += 1;
+      } else {
+        // If the user has already liked the post, remove their ID from the likes array and decrement the likeCount
+        post.likes.splice(userIndex, 1);
+        post.likeCount -= 1;
+      }
+
+      await post.save(); // Save the changes to the post
+
+      res.json(post); // Return the updated post
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
 
 
 };
