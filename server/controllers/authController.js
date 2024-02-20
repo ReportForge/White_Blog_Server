@@ -80,7 +80,7 @@ const verifyEmail = async (req, res) => {
       return res.status(400).json({ message: 'Invalid verification code.' });
     }
 
-    user.isVerified = true; // Mark the user as verified
+    user.emailVerified = true; // Mark the user as verified
     await user.save();
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
     res.status(201).json({ user, token });
