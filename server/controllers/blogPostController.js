@@ -191,6 +191,20 @@ const blogPostController = {
     }
   },
 
+  async getLikedPostsByUser(req, res) {
+    const userId = req.user.userId;
+  
+    try {
+      const likedPosts = await BlogPost.find({ likes: userId });
+      if (!likedPosts) {
+        return res.status(404).json({ message: 'No liked posts found for this user.' });
+      }
+      res.json(likedPosts);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  
 
 };
 

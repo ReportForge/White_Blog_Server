@@ -12,14 +12,18 @@ router.post('/', isAuthenticated, isEditor, blogPostController.createBlogPost);
 // Get the current user's draft post - Only accessible by authenticated users
 router.get('/draft', isAuthenticated, blogPostController.getDraftPost);
 
-// Route for liking/unliking a blogPost post - Only accessible by authenticated users
-router.put('/like', isAuthenticated, blogPostController.handleLikePost);
 
 // Delete the current user's draft post - Only accessible by authenticated users
 router.delete('/draft', isAuthenticated, blogPostController.deleteDraftPost);
 
 // Save or update the current user's draft post - Only accessible by authenticated users
 router.post('/draft', isAuthenticated, blogPostController.saveDraft);
+
+// Route for liking/unliking a blogPost post - Only accessible by authenticated users
+router.put('/like', isAuthenticated, blogPostController.handleLikePost);
+
+// Route to get liked posts by the current user - Only accessible by authenticated users
+router.get('/liked', isAuthenticated, blogPostController.getLikedPostsByUser);
 
 // Get a single blogPost post by ID - placed after the '/draft' route to avoid conflicts
 router.get('/:id', blogPostController.getBlogPostById);
