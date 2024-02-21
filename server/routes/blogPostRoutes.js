@@ -25,6 +25,9 @@ router.put('/like', isAuthenticated, blogPostController.handleLikePost);
 // Route to get liked posts by the current user - Only accessible by authenticated users
 router.get('/liked', isAuthenticated, blogPostController.getLikedPostsByUser);
 
+// Route to fetch posts created by the currently authenticated user
+router.get('/by-author',isAuthenticated, blogPostController.fetchPostsByAuthorName);
+
 // Get a single blogPost post by ID - placed after the '/draft' route to avoid conflicts
 router.get('/:id', blogPostController.getBlogPostById);
 

@@ -160,7 +160,7 @@ const blogPostController = {
   },
 
   async handleLikePost(req, res) {
-    const { postId } = req.body; 
+    const { postId } = req.body;
     const userId = req.user.userId;
 
     try {
@@ -193,7 +193,7 @@ const blogPostController = {
 
   async getLikedPostsByUser(req, res) {
     const userId = req.user.userId;
-  
+
     try {
       const likedPosts = await BlogPost.find({ likes: userId });
       if (!likedPosts) {
@@ -204,7 +204,28 @@ const blogPostController = {
       res.status(500).json({ message: error.message });
     }
   },
-  
+
+  async fetchPostsByAuthorName(req, res) {
+    const firstName = req.query.firstName;
+    const lastName = req.query.lastName;
+    console.log(req.query);
+
+    const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    const authorName = `${capitalizeFirstLetter(firstName)} ${capitalizeFirstLetter(lastName)}`;
+    console.log(authorName);
+
+    try {
+      const posts = await BlogPost.find({ "authors.name": authorName });
+      if (posts.length === 0) {
+        return res.status(404).json({ message: 'No posts found for this author.' });
+      }
+      res.json(posts);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+
 
 };
 
