@@ -2,6 +2,8 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 // User registration
 const register = async (req, res) => {
@@ -108,4 +110,54 @@ const login = async (req, res) => {
   }
 }
 
-module.exports = { register, login, verifyEmail };
+const googleLogin = async (req, res) => {
+  const { tokenId } = req.body; // ID token provided by Google on the client side
+
+  try {
+    // Verify the ID token
+    const ticket = await client.verifyIdToken({
+      idToken: tokenId,
+      audience: process.env.CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+    });
+
+    const payload = ticket.getPayload(); // Get user info from the payload
+
+    // Check if the user exists in the database
+    let user = await User.findOne({ email: payload['email'] });
+
+    if (user) {
+      // User exists, update if necessary
+      // For example, update the profile picture if it's different
+      if (user.profilePicture !== payload['picture']) {
+        user.profilePicture = payload['picture'];
+        await user.save();
+      }
+    } else {
+      // Create a new user with information from Google
+      user = new User({
+        firstName: payload['given_name'],
+        lastName: payload['family_name'],
+        email: payload['email'],
+        emailVerified: true, // Email is verified by Google
+        isEditor: false, // Default value, adjust as necessary
+        profilePicture: payload['picture'] || '', // Use Google profile picture if available
+        password: 'google auth',
+        // Since this user is registered via Google, some fields like password are not applicable
+        // For fields like verificationCode, resetPasswordToken, and resetPasswordExpire, set default or placeholder values as they are not applicable for Google-authenticated users
+      });
+
+      await user.save();
+    }
+
+    // Generate a token for the session
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
+
+    // Respond with the token and user information
+    res.json({ token, user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+module.exports = { register, login, verifyEmail, googleLogin };

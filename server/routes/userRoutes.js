@@ -3,6 +3,8 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const { isAuthenticated } = require('../middleware/authMiddleware');
 
+
+
 // Get user profile - Only accessible by the user themselves or an admin
 router.get('/:id', isAuthenticated, userController.getUserProfile);
 

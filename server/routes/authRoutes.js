@@ -12,6 +12,7 @@ router.post('/login', authController.login);
 // Email verification
 router.post('/verify-email', authController.verifyEmail);
 
-// You can add more routes for logout, token refresh, etc.
+// New route for Google authentication
+router.post('/google-login', authController.googleLogin);
 
 module.exports = router;
