@@ -208,11 +208,9 @@ const blogPostController = {
   async fetchPostsByAuthorName(req, res) {
     const firstName = req.query.firstName;
     const lastName = req.query.lastName;
-    console.log(req.query);
 
     const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
     const authorName = `${capitalizeFirstLetter(firstName)} ${capitalizeFirstLetter(lastName)}`;
-    console.log(authorName);
 
     try {
       const posts = await BlogPost.find({ "authors.name": authorName });
