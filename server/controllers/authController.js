@@ -126,12 +126,11 @@ const googleLogin = async (req, res) => {
     let user = await User.findOne({ email: payload['email'] });
 
     if (user) {
-      // User exists, update if necessary
-      // For example, update the profile picture if it's different
-      if (user.profilePicture !== payload['picture']) {
-        user.profilePicture = payload['picture'];
-        await user.save();
-      }
+      // User exists
+      // if (user.profilePicture !== payload['picture']) {
+      //   user.profilePicture = payload['picture'];
+      //   await user.save();
+      // }
     } else {
       // Create a new user with information from Google
       user = new User({
