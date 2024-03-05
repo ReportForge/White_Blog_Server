@@ -24,5 +24,6 @@ router.post('/request-password-reset', userController.requestPasswordReset);
 
 router.post('/submit-new-password', userController.submitNewPassword);
 
+router.post('/blog-post-request', isAuthenticated, userController.sendBlogPostRequest);
 
 module.exports = router;

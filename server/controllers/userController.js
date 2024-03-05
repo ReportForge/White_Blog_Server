@@ -151,6 +151,43 @@ const userController = {
     }
   },
 
+  async sendBlogPostRequest(req, res) {
+    try {
+      const { subject, description,userEmail } = req.body;
+
+      // Setup nodemailer transporter
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL, // Your email
+          pass: process.env.EMAIL_PASSWORD, // Your email account password
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.EMAIL, // The authenticated sender
+        to: process.env.EMAIL, // Where you want to receive the requests
+        subject: `Blog Post Request from ${userEmail}: ${subject}`,
+        html: `<p>From: ${userEmail}</p><p>${description}</p>`, // Include the user's email in the body
+      };
+      
+
+      // Send the email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error sending email:', error);
+          return res.status(500).json({ message: 'Failed to send your request.' });
+        }
+        console.log('Email sent: ' + info.response);
+        res.status(200).json({ message: 'Your request has been sent successfully.' });
+      });
+    } catch (error) {
+      console.error('sendBlogPostRequest error:', error);
+      res.status(500).json({ message: 'Internal server error.' });
+    }
+  },
+
+
 };//end
 
 
