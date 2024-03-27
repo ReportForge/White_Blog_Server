@@ -24,7 +24,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Could not connect to MongoDB', err));
 
-  
+
 // Define routes
 app.use('/api/posts', postsRoute);
 app.use('/api/users', usersRoute);
@@ -33,4 +33,9 @@ app.use('/api/auth', authRoutes);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Server is running on port ${PORT}`);
+});
+
+
+app.get('/', (req, res) => {
+  res.send('Hello, World!');
 });
