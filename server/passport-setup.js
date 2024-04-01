@@ -5,7 +5,7 @@ const User = require('./models/User');
 passport.use(new TwitterStrategy({
     consumerKey: process.env.TWITTER_CONSUMER_KEY,
     consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-    callbackURL: "/api/auth/twitter/callback"
+    callbackURL: "https://whiteblog-ffb7cfa6fd24.herokuapp.com/api/auth/twitter/callback"
   },
   async (token, tokenSecret, profile, cb) => {
     // Here, you will find or create a user in your database
