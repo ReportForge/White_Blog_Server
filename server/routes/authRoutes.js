@@ -21,25 +21,23 @@ router.get('/twitter', passport.authenticate('twitter'));
 
 
 // Twitter Callback Route
+// Twitter Callback Route
 router.get('/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/login' }),
-    async (req, res) => {
-        // Successful authentication
-        console.log("User authenticated successfully with Twitter.");
-
+    (req, res) => {
         if (req.user) {
             // Generate a token for the session
             const token = jwt.sign({ userId: req.user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
 
-            // Optionally, you could fetch more detailed user information here if needed
-
-            // Respond with the token and user information as JSON
-            res.json({ token, user: req.user });
+            // Redirect to the frontend with the token and user data in the URL
+            const frontendURL = 'http://yourfrontend.com/twitter-callback';
+            res.redirect(`${frontendURL}?token=${token}&user=${encodeURIComponent(JSON.stringify(req.user))}`);
         } else {
-            // Handle case where req.user is not available
-            res.status(400).json({ message: "Authentication successful, but user information is not available." });
+            // Redirect to a failure page or the login page with an error message
+            res.redirect(`/login?error='Authentication failed'`);
         }
     }
 );
+
 
 
 
