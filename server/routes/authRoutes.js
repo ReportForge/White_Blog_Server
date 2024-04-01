@@ -19,12 +19,15 @@ router.post('/google-login', authController.googleLogin);
 router.get('/twitter', passport.authenticate('twitter'));
 
 // Twitter Callback Route
+// In your authRoutes file
 router.get('/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/login' }),
     function (req, res) {
-        // Successful authentication, redirect home or to another page.
-        res.redirect('/');
+        // Successful authentication
+        console.log("User authenticated successfully with Twitter.");
+        res.redirect('/');  // Redirect or send response as per your frontend needs
     }
 );
+
 
 
 module.exports = router;
