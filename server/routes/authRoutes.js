@@ -15,4 +15,16 @@ router.post('/verify-email', authController.verifyEmail);
 // New route for Google authentication
 router.post('/google-login', authController.googleLogin);
 
+// Twitter Authentication Route
+router.get('/twitter', passport.authenticate('twitter'));
+
+// Twitter Callback Route
+router.get('/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/login' }),
+    function (req, res) {
+        // Successful authentication, redirect home or to another page.
+        res.redirect('/');
+    }
+);
+
+
 module.exports = router;
