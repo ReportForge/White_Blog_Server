@@ -5,6 +5,7 @@ const postsRoute = require('./routes/blogPostRoutes');
 const usersRoute = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const cors = require('cors');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -38,4 +39,16 @@ app.listen(process.env.PORT || 3000, () => {
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
+});
+
+// New endpoint to serve the PDF
+app.get('/pdf', (req, res) => {
+  const filePath = path.join(__dirname, 'Terms_of_Service_White_Blog.pdf'); // Adjust the path as needed
+  res.sendFile(filePath, err => {
+    if (err) {
+      // Handle error, but make sure not to expose internal details
+      console.error('Error sending PDF file:', err);
+      res.status(500).send('An error occurred');
+    }
+  });
 });
