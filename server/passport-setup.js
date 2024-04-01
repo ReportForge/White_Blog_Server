@@ -9,6 +9,7 @@ passport.use(new TwitterStrategy({
   },
   async (token, tokenSecret, profile, cb) => {
     console.log("Twitter auth callback function called.");
+    console.log(profile);
     let user = await User.findOne({ twitterId: profile.id });
     if (user) {
       return cb(null, user);
