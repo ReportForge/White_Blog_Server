@@ -12,7 +12,7 @@ passport.use(new TwitterStrategy({
     const nameParts = profile.displayName.split(' ');
     const firstName = nameParts[0] || 'TwitterUser'; // Use the first part as the first name, default if empty
     const lastName = nameParts.slice(1).join(' ') || ''; // Join the rest as the last name, empty if none
-    let user = await User.findOne({ twitterId: profile.id });
+    let user = await User.findOne({ email: `${profile.username}@twitter.com` });
     if (user) {
       return cb(null, user);
     } else {
@@ -26,7 +26,7 @@ passport.use(new TwitterStrategy({
         emailVerified: true // Assuming Twitter accounts are verified
         // Add other fields as necessary
       });
-      
+
       await user.save();
       return cb(null, user);
     }
