@@ -26,7 +26,7 @@ passport.use(new TwitterStrategy({
         emailVerified: true // Assuming Twitter accounts are verified
         // Add other fields as necessary
       });
-
+      
       await user.save();
       return cb(null, user);
     }

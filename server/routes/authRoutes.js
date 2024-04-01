@@ -18,15 +18,28 @@ router.post('/google-login', authController.googleLogin);
 // Twitter Authentication Route
 router.get('/twitter', passport.authenticate('twitter'));
 
+
 // Twitter Callback Route
-// In your authRoutes file
 router.get('/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/login' }),
-    function (req, res) {
+    async (req, res) => {
         // Successful authentication
         console.log("User authenticated successfully with Twitter.");
-        res.redirect('/');  // Redirect or send response as per your frontend needs
+
+        if (req.user) {
+            // Generate a token for the session
+            const token = jwt.sign({ userId: req.user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
+
+            // Optionally, you could fetch more detailed user information here if needed
+
+            // Respond with the token and user information as JSON
+            res.json({ token, user: req.user });
+        } else {
+            // Handle case where req.user is not available
+            res.status(400).json({ message: "Authentication successful, but user information is not available." });
+        }
     }
 );
+
 
 
 
