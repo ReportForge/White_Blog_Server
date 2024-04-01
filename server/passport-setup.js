@@ -10,6 +10,7 @@ passport.use(new TwitterStrategy({
   async (token, tokenSecret, profile, cb) => {
     // Here, you will find or create a user in your database
     // Check if user already exists in your database
+    console.log("Its get here");
     let user = await User.findOne({ twitterId: profile.id });
     if (user) {
       return cb(null, user);
