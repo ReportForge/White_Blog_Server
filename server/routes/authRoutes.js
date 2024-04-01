@@ -21,7 +21,6 @@ router.get('/twitter', passport.authenticate('twitter'));
 
 
 // Twitter Callback Route
-// Twitter Callback Route
 router.get('/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/login' }),
     (req, res) => {
         if (req.user) {
@@ -29,7 +28,7 @@ router.get('/twitter/callback', passport.authenticate('twitter', { failureRedire
             const token = jwt.sign({ userId: req.user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
 
             // Redirect to the frontend with the token and user data in the URL
-            const frontendURL = 'http://yourfrontend.com/twitter-callback';
+            const frontendURL = 'http://localhost:3001/twitter-callback';
             res.redirect(`${frontendURL}?token=${token}&user=${encodeURIComponent(JSON.stringify(req.user))}`);
         } else {
             // Redirect to a failure page or the login page with an error message
