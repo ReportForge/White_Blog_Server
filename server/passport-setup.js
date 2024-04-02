@@ -27,7 +27,7 @@ passport.use(new TwitterStrategy({
         email: email, // Default value, consider prompting the user for a real email later
         password: 'twitter', // Consider using a more secure default password or a password hash
         emailVerified: true,
-        profilePicture: profile.profile_image_url
+        profilePicture: profile.photos && profile.photos[0].value
          // Assuming Twitter accounts are verified
         // Add other fields as necessary
       });
