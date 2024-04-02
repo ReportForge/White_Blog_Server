@@ -5,7 +5,8 @@ const User = require('./models/User');
 passport.use(new TwitterStrategy({
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-  callbackURL: "https://whiteblog-ffb7cfa6fd24.herokuapp.com/api/auth/twitter/callback"
+  callbackURL: "https://whiteblog-ffb7cfa6fd24.herokuapp.com/api/auth/twitter/callback",
+  includeEmail: true
 },
   async (token, tokenSecret, profile, cb) => {
     console.log("Twitter auth callback function called.");
