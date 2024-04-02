@@ -10,7 +10,7 @@ passport.use(new TwitterStrategy({
 },
   async (token, tokenSecret, profile, cb) => {
     console.log("Twitter auth callback function called.");
-    console.log(profile);
+    console.log(profile.email);
     const nameParts = profile.displayName.split(' ');
     const firstName = nameParts[0] || 'TwitterUser'; // Use the first part as the first name, default if empty
     const lastName = nameParts.slice(1).join(' ') || ''; // Join the rest as the last name, empty if none
