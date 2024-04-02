@@ -10,11 +10,12 @@ passport.use(new TwitterStrategy({
 },
   async (token, tokenSecret, profile, cb) => {
     console.log("Twitter auth callback function called.");
-    console.log(profile.email);
+    console.log(profile.emails[0].value);
+    const email = profile.emails && profile.emails[0].value;
     const nameParts = profile.displayName.split(' ');
     const firstName = nameParts[0] || 'TwitterUser'; // Use the first part as the first name, default if empty
     const lastName = nameParts.slice(1).join(' ') || ''; // Join the rest as the last name, empty if none
-    let user = await User.findOne({ email: profile.email });
+    let user = await User.findOne({ email: email });
     if (user) {
       return cb(null, user);
     } else {
@@ -23,7 +24,7 @@ passport.use(new TwitterStrategy({
         twitterId: profile.id,
         firstName: firstName, // Default value, consider prompting the user to update it later
         lastName: lastName, // Default value, consider prompting the user to update it later
-        email: profile.email, // Default value, consider prompting the user for a real email later
+        email: email, // Default value, consider prompting the user for a real email later
         password: 'twitter', // Consider using a more secure default password or a password hash
         emailVerified: true,
         profilePicture: profile.profile_image_url
