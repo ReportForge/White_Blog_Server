@@ -41,6 +41,9 @@ app.use('/api/posts', postsRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/auth', authRoutes);
 
+// Serve static files from the public directory
+app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
@@ -48,6 +51,7 @@ app.listen(PORT, () => {
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
+
 
 // Serve the PDF
 app.get('/pdf', (req, res) => {
