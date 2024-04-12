@@ -42,7 +42,7 @@ app.use('/api/users', usersRoute);
 app.use('/api/auth', authRoutes);
 
 // Serve static files from the public directory
-app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
